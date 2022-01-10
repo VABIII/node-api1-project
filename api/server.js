@@ -79,8 +79,34 @@ server.delete('/api/users/:id', async (req, res) => {
             error: err.message
         })
     }
-
 })
+
+server.put("/api/users/:id", async (req, res) => {
+    const { id } = req.params
+    const { name, bio } = req.body
+    try {
+        const updatedUser = await Users.update(id, {name, bio})
+        if(!name || !bio) {
+            res.status(400).json({
+                message: "Please provide name and bio for the user"
+            })
+        } else if (!updatedUser){
+            res.status(404).json({
+                message: "The user with the specified ID does not exist"
+            })
+        }
+        else {
+            res.status(200).json(updatedUser)
+        }
+    }
+    catch (err) {
+        res.status(500).json({
+            message: "The user information could not be modified",
+            error: err.message,
+        })
+    }
+})
+
 
 module.exports = server; // EXPORT YOUR SERVER instead of {}
 
