@@ -28,7 +28,6 @@ server.post('/api/users', async (req, res) => {
     }
 })
 
-
 server.get("/api/users", async (req, res) => {
     try {
         const users = await Users.find()
@@ -42,7 +41,46 @@ server.get("/api/users", async (req, res) => {
     }
 })
 
+server.get('/api/users/:id', async (req, res) => {
+    const { id } = req.params
+    try {
+        const user = await Users.findById(id)
+        if(!user) {
+            res.status(404).json({
+                message: "The user information could not be retrieved"
+            })
+        } else {
+            res.json(user)
+        }
+    }
+    catch (err) {
+        res.status(404).json({
+            message: `User with id ${id} not found`,
+            error: err.message,
+        })
+    }
+})
 
+server.delete('/api/users/:id', async (req, res) => {
+    const { id } = req.params
+    try {
+        const deletedUser = await Users.remove(id)
+        if(!deletedUser){
+            res.status(404).json({
+                message: "The user with the specified ID does not exist"
+            })
+        } else {
+            res.json(deletedUser)
+        }
+    }
+    catch (err) {
+        res.status(404).json({
+            message: "The user could not be removed",
+            error: err.message
+        })
+    }
+
+})
 
 module.exports = server; // EXPORT YOUR SERVER instead of {}
 
