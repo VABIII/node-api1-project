@@ -9,13 +9,14 @@ const Users = require('./users/model')
 
 server.post('/api/users', async (req, res) => {
     const { name, bio } = req.body
+
     try {
+        const newUser = Users.insert({name, bio})
         if(!name || !bio) {
             res.status(400).json({
                 message: "Please provide name and bio for the user"
             })
         } else {
-            const newUser = Users.insert({name, bio})
             res.status(201).json(newUser)
         }
 
@@ -47,14 +48,14 @@ server.get('/api/users/:id', async (req, res) => {
         const user = await Users.findById(id)
         if(!user) {
             res.status(404).json({
-                message: "The user information could not be retrieved"
+                message: "does not exist"
             })
         } else {
             res.json(user)
         }
     }
     catch (err) {
-        res.status(404).json({
+        res.status(500).json({
             message: `User with id ${id} not found`,
             error: err.message,
         })
