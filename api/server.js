@@ -19,7 +19,6 @@ server.post('/api/users', async (req, res) => {
         } else {
             res.status(201).json(newUser)
         }
-
     }
     catch (err) {
         res.status(500).json({
