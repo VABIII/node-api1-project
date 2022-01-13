@@ -11,7 +11,7 @@ server.post('/api/users', async (req, res) => {
     const { name, bio } = req.body
 
     try {
-        const newUser = Users.insert({name, bio})
+        const newUser = await Users.insert({name, bio})
         if(!name || !bio) {
             res.status(400).json({
                 message: "Please provide name and bio for the user"
